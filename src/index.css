@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@keyframes typewriter {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+.animate-typewriter {
+  animation: typewriter 1s steps(40, end) forwards;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.animate-typewriter-fast {
+  animation: typewriter 0.5s steps(20, end) forwards;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+#bento-dashboard-master .CanvasPreview {
+  transition: transform 0.3s ease-in-out;
+}
+
+#bento-dashboard-master .CanvasPreview:hover {
+  transform: scale(1.02);
+}
+
+

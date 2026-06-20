@@ -1,0 +1,6 @@
+{
+  "name": "GitHub OG Image Manager",
+  "description": "A centralized dashboard to automatically generate dynamic, programmatic Open Graph images for GitHub repositories with Satori, Gemini, and real-time statistics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
