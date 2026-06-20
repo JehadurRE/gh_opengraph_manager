@@ -569,6 +569,8 @@ export default function CanvasPreview({ config, onChange, stats, mode = 'edit', 
                   width="50"
                   height="50"
                   clipPath="url(#avatarClip)"
+                  preserveAspectRatio="xMidYMid slice"
+                  referrerPolicy="no-referrer"
                 />
               </g>
             )}
