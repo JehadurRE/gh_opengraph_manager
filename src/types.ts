@@ -53,4 +53,5 @@ export interface TemplateConfig {
   statsOffset?: { x: number; y: number };
   codeSnippetOffset?: { x: number; y: number };
   logoOffset?: { x: number; y: number };
+  showGuides?: boolean;
 }

@@ -82,7 +82,7 @@ export const DEFAULT_TEMPLATE: TemplateConfig = {
   title: 'IntentDetector',
   tagline: 'Decentralized Agent Routing & Fast Intent Identification.',
   ownerName: 'jehadurre',
-  ownerAvatarUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&h=150&fit=crop&q=80',
+  ownerAvatarUrl: 'https://avatars.githubusercontent.com/jehadurre',
   primaryColor: '#22c55e',
   secondaryColor: '#16a34a',
   accentColor: '#4ade80',

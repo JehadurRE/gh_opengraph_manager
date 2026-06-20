@@ -65,6 +65,7 @@ export default function App() {
         title: activeRepo.name,
         tagline: activeRepo.tagline || activeRepo.description,
         ownerName: activeRepo.owner,
+        ownerAvatarUrl: `https://avatars.githubusercontent.com/${activeRepo.owner}`,
         primaryColor: activeRepo.suggestedPalette?.primary || DEFAULT_TEMPLATE.primaryColor,
         secondaryColor: activeRepo.suggestedPalette?.secondary || DEFAULT_TEMPLATE.secondaryColor,
         accentColor: activeRepo.suggestedPalette?.accent || DEFAULT_TEMPLATE.accentColor,

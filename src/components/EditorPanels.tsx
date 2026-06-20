@@ -545,7 +545,19 @@ export default function EditorPanels({ config, onChange, appLayout, activeRepo }
         </div>
         
         <div className="flex flex-col gap-4">
-          <p className="text-xs text-zinc-500 italic pb-2">Adjust position coordinates slightly to fix overlap edges</p>
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 pb-2">
+            <p className="text-xs text-zinc-500 italic">Adjust position coordinates slightly to fix overlap edges</p>
+            
+            <label className="flex items-center gap-2 cursor-pointer group">
+              <input 
+                type="checkbox" 
+                checked={config.showGuides || false}
+                onChange={(e) => onChange({ showGuides: e.target.checked })}
+                className="w-4 h-4 rounded bg-zinc-800 border-zinc-700 text-orange-500 focus:ring-orange-500/30 focus:ring-offset-0"
+              />
+              <span className="text-xs font-semibold text-zinc-300 group-hover:text-white transition-colors">Show Rulers & Guides</span>
+            </label>
+          </div>
           
           <div className="grid grid-cols-2 gap-4">
             {/* Title / Tagline Block */}

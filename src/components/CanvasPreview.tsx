@@ -163,6 +163,49 @@ export default function CanvasPreview({ config, onChange, stats, mode = 'edit', 
     borderWidth,
   } = config;
 
+  const [base64Avatar, setBase64Avatar] = useState<string>('');
+  const [base64Bg, setBase64Bg] = useState<string>('');
+
+  useEffect(() => {
+    if (!ownerAvatarUrl) {
+      setBase64Avatar('');
+      return;
+    }
+    const fetchAvatar = async () => {
+      try {
+        const response = await fetch(ownerAvatarUrl);
+        const blob = await response.blob();
+        const reader = new FileReader();
+        reader.onloadend = () => setBase64Avatar(reader.result as string);
+        reader.readAsDataURL(blob);
+      } catch (err) {
+        console.error('Failed to convert avatar', err);
+        setBase64Avatar(ownerAvatarUrl);
+      }
+    };
+    fetchAvatar();
+  }, [ownerAvatarUrl]);
+
+  useEffect(() => {
+    if (!config.customBackgroundImageUrl) {
+      setBase64Bg('');
+      return;
+    }
+    const fetchBg = async () => {
+      try {
+        const response = await fetch(config.customBackgroundImageUrl!);
+        const blob = await response.blob();
+        const reader = new FileReader();
+        reader.onloadend = () => setBase64Bg(reader.result as string);
+        reader.readAsDataURL(blob);
+      } catch (err) {
+        console.error('Failed to convert bg', err);
+        setBase64Bg(config.customBackgroundImageUrl!);
+      }
+    };
+    fetchBg();
+  }, [config.customBackgroundImageUrl]);
+
   // Handles copying the direct SVG string
   const handleCopySvg = () => {
     if (!svgRef.current) return;
@@ -300,7 +343,7 @@ export default function CanvasPreview({ config, onChange, stats, mode = 'edit', 
 
           {/* Custom Uploaded Background Override */}
           {config.customBackgroundImageUrl && (
-            <image href={config.customBackgroundImageUrl} width={width} height={height} preserveAspectRatio="xMidYMid slice" opacity="1" />
+            <image href={base64Bg || config.customBackgroundImageUrl} width={width} height={height} preserveAspectRatio="xMidYMid slice" opacity="1" />
           )}
 
           {/* Scale and Center Content Layer designed for 1200x630 */}
@@ -428,6 +471,45 @@ export default function CanvasPreview({ config, onChange, stats, mode = 'edit', 
 
           {/* BRANDING HEADER (Top Bar) */}
 
+          {/* Rulers and Guides Overlay */}
+          {config.showGuides && mode === 'edit' && (
+            <g className="opacity-50 pointer-events-none text-[8px] font-mono fill-zinc-500">
+              {/* Grid 100x100 */}
+              <pattern id="grid100" width="100" height="100" patternUnits="userSpaceOnUse">
+                <rect width="100" height="100" fill="none" stroke="#f97316" strokeOpacity="0.1" strokeWidth="1" strokeDasharray="4 4"/>
+              </pattern>
+              <rect width="1200" height="630" fill="url(#grid100)" />
+              
+              {/* Grid 20x20 minor */}
+              <pattern id="grid20" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#f97316" strokeOpacity="0.05" strokeWidth="0.5"/>
+              </pattern>
+              <rect width="1200" height="630" fill="url(#grid20)" />
+
+              {/* X Rulers */}
+              {Array.from({ length: 13 }).map((_, i) => (
+                <g key={`x-${i}`} transform={`translate(${i * 100}, 0)`}>
+                  <line x1="0" y1="0" x2="0" y2="15" stroke="#f97316" strokeOpacity="0.4" strokeWidth="1" />
+                  <line x1="0" y1="615" x2="0" y2="630" stroke="#f97316" strokeOpacity="0.4" strokeWidth="1" />
+                  {i > 0 && i < 12 && <text x="3" y="10" stroke="none">{i * 100}</text>}
+                </g>
+              ))}
+
+              {/* Y Rulers */}
+              {Array.from({ length: 7 }).map((_, i) => (
+                <g key={`y-${i}`} transform={`translate(0, ${i * 100})`}>
+                  <line x1="0" y1="0" x2="15" y2="0" stroke="#f97316" strokeOpacity="0.4" strokeWidth="1" />
+                  <line x1="1185" y1="0" x2="1200" y2="0" stroke="#f97316" strokeOpacity="0.4" strokeWidth="1" />
+                  {i > 0 && i < 6 && <text x="18" y="3" stroke="none">{i * 100}</text>}
+                </g>
+              ))}
+
+              {/* Canvas Center Lines (Absolute Center) */}
+              <line x1="600" y1="0" x2="600" y2="630" stroke="#f97316" strokeOpacity="0.4" strokeDasharray="4 4" strokeWidth="1" />
+              <line x1="0" y1="315" x2="1200" y2="315" stroke="#f97316" strokeOpacity="0.4" strokeDasharray="4 4" strokeWidth="1" />
+            </g>
+          )}
+
           {/* Snapping Guidelines */}
           {activeDragLayer && (
             <g stroke="#f97316" strokeWidth="1" strokeDasharray="5 5" opacity="0.6">
@@ -481,7 +563,7 @@ export default function CanvasPreview({ config, onChange, stats, mode = 'edit', 
                 {/* Glow behind avatar */}
                 <circle cx="25" cy="25" r="29" fill={primaryColor} opacity={glowEffect ? "0.45" : "0.1"} filter="url(#softGlow)" />
                 <image
-                  href={ownerAvatarUrl}
+                  href={base64Avatar || ownerAvatarUrl}
                   x="0"
                   y="0"
                   width="50"
